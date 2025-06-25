@@ -10,5 +10,5 @@ public class PluginConfiguration : BasePluginConfiguration
     /// <summary>
     /// Gets or sets the amount of days a device should be kept.
     /// </summary>
-    public int Days { get; set; } = 30;
+    public int PausedSeconds { get; set; } = 3600;
 }
