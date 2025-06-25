@@ -9,24 +9,24 @@ using MediaBrowser.Controller.Session;
 using MediaBrowser.Model.Globalization;
 using MediaBrowser.Model.Tasks;
 
-namespace Jellyfin.Plugin.SessionCleaner;
+namespace Jellyfin.Plugin.StopSessions;
 
 /// <summary>
 /// Device cleaner task.
 /// </summary>
-public class SessionCleanerTask : IScheduledTask, IConfigurableScheduledTask
+public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
 {
     private readonly IDeviceManager _deviceManager;
     private readonly ISessionManager _sessionManager;
     private readonly ILocalizationManager _localizationManager;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SessionCleanerTask"/> class.
+    /// Initializes a new instance of the <see cref="StopSessionsTask"/> class.
     /// </summary>
     /// <param name="sessionManager">Instance of the <see cref="ISessionManager"/> interface.</param>
     /// <param name="localizationManager">Instance of the <see cref="ILocalizationManager"/> interface.</param>
     /// <param name="deviceManager">Instance of the <see cref="IDeviceManager"/> interface.</param>
-    public SessionCleanerTask(
+    public StopSessionsTask(
         ISessionManager sessionManager,
         ILocalizationManager localizationManager,
         IDeviceManager deviceManager)
@@ -60,8 +60,8 @@ public class SessionCleanerTask : IScheduledTask, IConfigurableScheduledTask
     /// <inheritdoc />
     public async Task ExecuteAsync(IProgress<double> progress, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(SessionCleanerPlugin.Instance?.Configuration);
-        var expireDays = SessionCleanerPlugin.Instance.Configuration.Days;
+        ArgumentNullException.ThrowIfNull(StopSessionsPlugin.Instance?.Configuration);
+        var expireDays = StopSessionsPlugin.Instance.Configuration.Days;
         var expireDate = DateTime.UtcNow.AddDays(expireDays * -1);
         var deviceResult = _deviceManager.GetDevices(new DeviceQuery());
         var devices = deviceResult?.Items;

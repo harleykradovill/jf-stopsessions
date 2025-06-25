@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using Jellyfin.Plugin.SessionCleaner.Configuration;
+using Jellyfin.Plugin.StopSessions.Configuration;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 
-namespace Jellyfin.Plugin.SessionCleaner;
+namespace Jellyfin.Plugin.StopSessions;
 
 /// <summary>
 /// Plugin entrypoint.
 /// </summary>
-public class SessionCleanerPlugin : BasePlugin<PluginConfiguration>, IHasWebPages
+public class StopSessionsPlugin : BasePlugin<PluginConfiguration>, IHasWebPages
 {
     private readonly Guid _id = new("EC9E2A74-1311-4A14-B302-158E3D95FD1D");
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SessionCleanerPlugin"/> class.
+    /// Initializes a new instance of the <see cref="StopSessionsPlugin"/> class.
     /// </summary>
     /// <param name="applicationPaths">Instance of the <see cref="IApplicationPaths"/> interface.</param>
     /// <param name="xmlSerializer">Instance of the <see cref="IXmlSerializer"/> interface.</param>
-    public SessionCleanerPlugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer)
+    public StopSessionsPlugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer)
         : base(applicationPaths, xmlSerializer)
     {
         Instance = this;
@@ -29,16 +29,16 @@ public class SessionCleanerPlugin : BasePlugin<PluginConfiguration>, IHasWebPage
     /// <summary>
     /// Gets the current plugin instance.
     /// </summary>
-    public static SessionCleanerPlugin? Instance { get; private set; }
+    public static StopSessionsPlugin? Instance { get; private set; }
 
     /// <inheritdoc />
     public override Guid Id => _id;
 
     /// <inheritdoc />
-    public override string Name => "Session Cleaner";
+    public override string Name => "Stop Sessions";
 
     /// <inheritdoc />
-    public override string Description => "Cleans old sessions.";
+    public override string Description => "Stops paused sessions.";
 
     /// <inheritdoc />
     public IEnumerable<PluginPageInfo> GetPages()

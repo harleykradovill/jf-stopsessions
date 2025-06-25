@@ -10,13 +10,13 @@
             <form class="esqConfigurationForm">
                 <div class="verticalSection verticalSection-extrabottompadding">
                     <div class="sectionTitleContainer flex align-items-center">
-                        <h2 class="sectionTitle">Session Cleaner Settings:</h2>
-                        <a is="emby-linkbutton" class="raised button-alt headerHelpButton" target="_blank" href="https://github.com/jellyfin/jellyfin-plugin-sessioncleaner/">${Help}</a>
+                        <h2 class="sectionTitle">Stop Sessions Settings:</h2>
+                        <a is="emby-linkbutton" class="raised button-alt headerHelpButton" target="_blank" href="">${Help}</a>
                     </div>
                     <div class="verticalSection verticalSection-extrabottompadding">
                         <div class="inputContainer">
-                            <input is="emby-input" type="text" id="txtCleanDays" label="Days:" />
-                            <div class="fieldDescription">Clean sessions older than the entered days.</div>
+                            <input is="emby-input" type="text" id="txtCleanDays" label="Seconds:" />
+                            <div class="fieldDescription">Stop sessions that are paused more than set seconds.</div>
                         </div>
                     </div>
                     <div>
@@ -34,7 +34,7 @@
 
 
     <script type="text/javascript">
-        var SessionCleanerConfigurationPage = {
+        var StopSessionsConfigurationPage = {
             pluginUniqueId: "EC9E2A74-1311-4A14-B302-158E3D95FD1D",
 
             txtCleanDays: document.querySelector("#txtCleanDays")
@@ -43,8 +43,8 @@
         window.addEventListener("pageshow", function (_) {
             Dashboard.showLoadingMsg();
             console.log('pageshow');
-            window.ApiClient.getPluginConfiguration(SessionCleanerConfigurationPage.pluginUniqueId).then(function (config) {
-                SessionCleanerConfigurationPage.txtCleanDays.value = config.Days || "30";
+            window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
+                StopSessionsConfigurationPage.txtCleanDays.value = config.Days || "30";
                 Dashboard.hideLoadingMsg();
             });
         });
@@ -53,9 +53,9 @@
             e.preventDefault();
             Dashboard.showLoadingMsg();
 
-            window.ApiClient.getPluginConfiguration(SessionCleanerConfigurationPage.pluginUniqueId).then(function (config) {
-                config.Days = SessionCleanerConfigurationPage.txtCleanDays.value;
-                window.ApiClient.updatePluginConfiguration(SessionCleanerConfigurationPage.pluginUniqueId, config).then(Dashboard.processPluginConfigurationUpdateResult);
+            window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
+                config.Days = StopSessionsConfigurationPage.txtCleanDays.value;
+                window.ApiClient.updatePluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId, config).then(Dashboard.processPluginConfigurationUpdateResult);
             });
 
             // Disable default form submission

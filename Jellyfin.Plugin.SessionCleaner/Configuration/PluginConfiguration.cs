@@ -1,6 +1,6 @@
 ﻿using MediaBrowser.Model.Plugins;
 
-namespace Jellyfin.Plugin.SessionCleaner.Configuration;
+namespace Jellyfin.Plugin.StopSessions.Configuration;
 
 /// <summary>
 /// Plugin configuration.
