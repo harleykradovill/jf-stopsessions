@@ -11,11 +11,10 @@
                 <div class="verticalSection verticalSection-extrabottompadding">
                     <div class="sectionTitleContainer flex align-items-center">
                         <h2 class="sectionTitle">Stop Sessions Settings:</h2>
-                        <a is="emby-linkbutton" class="raised button-alt headerHelpButton" target="_blank" href="">${Help}</a>
                     </div>
                     <div class="verticalSection verticalSection-extrabottompadding">
                         <div class="inputContainer">
-                            <input is="emby-input" type="text" id="txtCleanDays" label="Seconds:" />
+                            <input is="emby-input" type="text" id="txtCleanSecs" label="Seconds:" />
                             <div class="fieldDescription">Stop sessions that are paused more than set seconds.</div>
                         </div>
                     </div>
@@ -35,16 +34,16 @@
 
     <script type="text/javascript">
         var StopSessionsConfigurationPage = {
-            pluginUniqueId: "EC9E2A74-1311-4A14-B302-158E3D95FD1D",
+            pluginUniqueId: "28a6125c-cb57-4e8b-b031-421ac55cfa91",
 
-            txtCleanDays: document.querySelector("#txtCleanDays")
+            txtCleanSecs: document.querySelector("#txtCleanSecs")
         };
 
         window.addEventListener("pageshow", function (_) {
             Dashboard.showLoadingMsg();
             console.log('pageshow');
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                StopSessionsConfigurationPage.txtCleanDays.value = config.Days || "30";
+                StopSessionsConfigurationPage.txtCleanSecs.value = config.Days || "30";
                 Dashboard.hideLoadingMsg();
             });
         });
@@ -54,7 +53,7 @@
             Dashboard.showLoadingMsg();
 
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                config.Days = StopSessionsConfigurationPage.txtCleanDays.value;
+                config.Days = StopSessionsConfigurationPage.txtCleanSecs.value;
                 window.ApiClient.updatePluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId, config).then(Dashboard.processPluginConfigurationUpdateResult);
             });
 
