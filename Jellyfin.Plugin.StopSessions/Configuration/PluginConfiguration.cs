@@ -8,7 +8,7 @@ namespace Jellyfin.Plugin.StopSessions.Configuration;
 public class PluginConfiguration : BasePluginConfiguration
 {
     /// <summary>
-    /// Gets or sets the amount of days a device should be kept.
+    /// Gets or sets the amount of seconds a device should be kept.
     /// </summary>
     public int PausedSeconds { get; set; } = 3600;
 }

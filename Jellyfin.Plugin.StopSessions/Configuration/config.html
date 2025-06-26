@@ -43,7 +43,7 @@
             Dashboard.showLoadingMsg();
             console.log('pageshow');
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                StopSessionsConfigurationPage.txtCleanSecs.value = config.Days || "30";
+                StopSessionsConfigurationPage.txtCleanSecs.value = config.PausedSeconds || "3600";
                 Dashboard.hideLoadingMsg();
             });
         });
@@ -53,7 +53,7 @@
             Dashboard.showLoadingMsg();
 
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                config.Days = StopSessionsConfigurationPage.txtCleanSecs.value;
+                config.PausedSeconds = StopSessionsConfigurationPage.txtCleanSecs.value;
                 window.ApiClient.updatePluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId, config).then(Dashboard.processPluginConfigurationUpdateResult);
             });
 

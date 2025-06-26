@@ -7,7 +7,9 @@ using Jellyfin.Data.Queries;
 using MediaBrowser.Controller.Devices;
 using MediaBrowser.Controller.Session;
 using MediaBrowser.Model.Globalization;
+using MediaBrowser.Model.Session;
 using MediaBrowser.Model.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Plugin.StopSessions;
 
@@ -19,6 +21,7 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
     private readonly IDeviceManager _deviceManager;
     private readonly ISessionManager _sessionManager;
     private readonly ILocalizationManager _localizationManager;
+    private readonly ILogger<StopSessionsTask> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StopSessionsTask"/> class.
@@ -26,14 +29,17 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
     /// <param name="sessionManager">Instance of the <see cref="ISessionManager"/> interface.</param>
     /// <param name="localizationManager">Instance of the <see cref="ILocalizationManager"/> interface.</param>
     /// <param name="deviceManager">Instance of the <see cref="IDeviceManager"/> interface.</param>
+    /// <param name="logger">Instance of the <see cref="ILogger"/> interface. </param>
     public StopSessionsTask(
         ISessionManager sessionManager,
         ILocalizationManager localizationManager,
-        IDeviceManager deviceManager)
+        IDeviceManager deviceManager,
+        ILogger<StopSessionsTask> logger)
     {
         _sessionManager = sessionManager;
         _localizationManager = localizationManager;
         _deviceManager = deviceManager;
+        _logger = logger;
     }
 
     /// <inheritdoc />
@@ -46,10 +52,10 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
     public bool IsLogged => true;
 
     /// <inheritdoc />
-    public string Name => "Clean Old Sessions";
+    public string Name => "Stop Paused Sessions";
 
     /// <inheritdoc />
-    public string Key => "CleanOldSessions";
+    public string Key => "StopPausedSessions";
 
     /// <inheritdoc />
     public string Description => "Removes sessions older then the configured age.";
@@ -60,22 +66,36 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
     /// <inheritdoc />
     public async Task ExecuteAsync(IProgress<double> progress, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(StopSessionsPlugin.Instance?.Configuration);
-        var expireDays = StopSessionsPlugin.Instance.Configuration.Days;
-        var expireDate = DateTime.UtcNow.AddDays(expireDays * -1);
-        var deviceResult = _deviceManager.GetDevices(new DeviceQuery());
-        var devices = deviceResult?.Items;
-
-        if (devices is null)
+        if (StopSessionsPlugin.Instance?.Configuration == null)
         {
+            _logger.LogError("[### Stop Sessions] Plugin configuration is missing. Cannot proceed.");
             return;
         }
 
-        foreach (var device in devices)
+        ArgumentNullException.ThrowIfNull(StopSessionsPlugin.Instance?.Configuration);
+        var pausedSeconds = StopSessionsPlugin.Instance.Configuration.PausedSeconds;
+        var sessions = _sessionManager.GetSessions(Guid.Empty, null, null, null, true);
+
+        foreach (var session in sessions)
         {
-            if (device.DateLastActivity < expireDate)
+            if (session.PlayState != null && session.NowPlayingItem != null && session.LastPausedDate != null)
             {
-                await _sessionManager.Logout(device).ConfigureAwait(false);
+                var pausedDuration = DateTime.UtcNow - session.LastPausedDate.Value;
+                if (pausedDuration.TotalSeconds > pausedSeconds)
+                {
+                    var playstateRequest = new PlaystateRequest
+                    {
+                        Command = PlaystateCommand.Stop
+                    };
+
+                    await _sessionManager.SendPlaystateCommand(
+                        controllingSessionId: null,
+                        sessionId: session.Id,
+                        command: playstateRequest,
+                        cancellationToken: cancellationToken).ConfigureAwait(false);
+
+                    _logger.LogInformation("[### Stop Sessions] Sent stop command to session {SessionId}.", session.Id);
+                }
             }
         }
     }
@@ -83,6 +103,10 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
     /// <inheritdoc />
     public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
     {
-        return Enumerable.Empty<TaskTriggerInfo>();
+        yield return new TaskTriggerInfo
+        {
+            Type = TaskTriggerInfo.TriggerInterval,
+            IntervalTicks = TimeSpan.FromSeconds(30).Ticks
+        };
     }
 }
