@@ -9,8 +9,8 @@ var StopSessionsConfigurationPage = {
             Dashboard.showLoadingMsg();
             console.log('pageshow');
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                StopSessionsConfigurationPage.txtCleanValue.value = config.PausedValue || "3600";
-                StopSessionsConfigurationPage.txtCleanUnit.value = config.PausedUnit || "Seconds";
+                StopSessionsConfigurationPage.txtCleanValue.value = config.PausedValue ?? 3600;
+                StopSessionsConfigurationPage.txtCleanUnit.value = config.PausedUnit ?? "Seconds";
                 Dashboard.hideLoadingMsg();
             });
         });
@@ -20,7 +20,7 @@ var StopSessionsConfigurationPage = {
             Dashboard.showLoadingMsg();
 
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                config.PausedValue = StopSessionsConfigurationPage.txtCleanValue.value;
+                config.PausedValue = parseInt(StopSessionsConfigurationPage.txtCleanValue.value);
                 config.PausedUnit = StopSessionsConfigurationPage.txtCleanUnit.value;
                 window.ApiClient.updatePluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId, config).then(Dashboard.processPluginConfigurationUpdateResult);
             });
