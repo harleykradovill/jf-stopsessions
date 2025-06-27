@@ -73,7 +73,7 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
         }
 
         ArgumentNullException.ThrowIfNull(StopSessionsPlugin.Instance?.Configuration);
-        var pausedSeconds = StopSessionsPlugin.Instance.Configuration.PausedSeconds;
+        var pausedSeconds = StopSessionsPlugin.Instance.Configuration.PausedValue;
         var sessions = _sessionManager.GetSessions(Guid.Empty, null, null, null, true);
 
         foreach (var session in sessions)

@@ -1,14 +1,16 @@
 var StopSessionsConfigurationPage = {
             pluginUniqueId: "28a6125c-cb57-4e8b-b031-421ac55cfa91",
 
-            txtCleanSecs: document.querySelector("#txtCleanSecs")
+            txtCleanValue: document.querySelector("#txtCleanValue"),
+            txtCleanUnit: document.querySelector("#txtCleanUnit")
         };
 
         window.addEventListener("pageshow", function (_) {
             Dashboard.showLoadingMsg();
             console.log('pageshow');
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                StopSessionsConfigurationPage.txtCleanSecs.value = config.PausedSeconds || "3600";
+                StopSessionsConfigurationPage.txtCleanValue.value = config.PausedValue || "3600";
+                StopSessionsConfigurationPage.txtCleanUnit.value = config.PausedUnit || "Seconds";
                 Dashboard.hideLoadingMsg();
             });
         });
@@ -18,7 +20,8 @@ var StopSessionsConfigurationPage = {
             Dashboard.showLoadingMsg();
 
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                config.PausedSeconds = StopSessionsConfigurationPage.txtCleanSecs.value;
+                config.PausedValue = StopSessionsConfigurationPage.txtCleanValue.value;
+                config.PausedUnit = StopSessionsConfigurationPage.txtCleanUnit.value;
                 window.ApiClient.updatePluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId, config).then(Dashboard.processPluginConfigurationUpdateResult);
             });
 

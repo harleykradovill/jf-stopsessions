@@ -10,5 +10,10 @@ public class PluginConfiguration : BasePluginConfiguration
     /// <summary>
     /// Gets or sets the amount of seconds a device should be kept.
     /// </summary>
-    public int PausedSeconds { get; set; } = 3600;
+    public int PausedValue { get; set; } = 3600;
+
+    /// <summary>
+    /// Gets or sets the unit.
+    /// </summary>
+    public string PausedUnit { get; set; } = "Seconds";
 }

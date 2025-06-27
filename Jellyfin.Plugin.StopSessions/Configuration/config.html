@@ -12,12 +12,21 @@
                     <div class="sectionTitleContainer flex align-items-center">
                         <h2 class="sectionTitle">Stop Sessions Settings:</h2>
                     </div>
-                    <div class="verticalSection verticalSection-extrabottompadding">
-                        <div class="inputContainer">
-                            <input is="emby-input" type="text" id="txtCleanSecs" label="Seconds:" />
-                            <div class="fieldDescription">Stop sessions that are paused more than set seconds.</div>
+                    <div class="inputRow" style="display: flex; gap: 12px; align-items: flex-end; max-width: 400px;">
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="txtCleanValue">Duration:</label>
+                            <input is="emby-input" type="number" id="txtCleanValue" style="min-width: 100px; width: 150px;" min="0"/>
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="txtCleanUnit">Unit:</label>
+                            <select is="emby-select" id="txtCleanUnit" style="min-width: 100px; width: 150px;">
+                                <option value="seconds" selected>Seconds</option>
+                                <option value="minutes">Minutes</option>
+                                <option value="hours">Hours</option>
+                            </select>
                         </div>
                     </div>
+                    <div class="fieldDescription">Stop sessions that are paused more than the set duration.</div>
                     <div>
                         <button is="emby-button" type="submit" data-theme="b" class="raised button-submit block">
                             <span>${Save}</span>
