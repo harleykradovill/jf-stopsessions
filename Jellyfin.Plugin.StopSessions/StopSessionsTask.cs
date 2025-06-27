@@ -73,7 +73,18 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
         }
 
         ArgumentNullException.ThrowIfNull(StopSessionsPlugin.Instance?.Configuration);
-        var pausedSeconds = StopSessionsPlugin.Instance.Configuration.PausedValue;
+
+        var config = StopSessionsPlugin.Instance.Configuration;
+        var pausedValue = config.PausedValue;
+        var pausedUnit = config.PausedUnit;
+
+        double threshholdSeconds = pausedUnit switch // Convert to seconds
+        {
+            "minutes" => pausedValue * 60,
+            "hours" => pausedValue * 3600,
+            _ => pausedValue
+        };
+
         var sessions = _sessionManager.GetSessions(Guid.Empty, null, null, null, true);
 
         foreach (var session in sessions)
@@ -81,7 +92,7 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
             if (session.PlayState != null && session.NowPlayingItem != null && session.LastPausedDate != null)
             {
                 var pausedDuration = DateTime.UtcNow - session.LastPausedDate.Value;
-                if (pausedDuration.TotalSeconds > pausedSeconds)
+                if (pausedDuration.TotalSeconds > threshholdSeconds)
                 {
                     var playstateRequest = new PlaystateRequest
                     {
