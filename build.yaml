@@ -7,7 +7,7 @@ framework: "net8.0"
 owner: "jellyfin"
 overview: "Stops paused sessions."
 description: >
-  Stops paused sessions after x amount of seconds.
+  Stops paused sessions after a specified amount of time.
 
 category: "Administration"
 artifacts:
