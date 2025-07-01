@@ -85,6 +85,8 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
             _ => pausedValue
         };
 
+        _logger.LogInformation("[### Stop Sessions] Threshold seconds set to: {ThreshholdSeconds} seconds", threshholdSeconds);
+
         var sessions = _sessionManager.GetSessions(Guid.Empty, null, null, null, true);
 
         foreach (var session in sessions)
