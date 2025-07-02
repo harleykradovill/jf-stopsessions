@@ -126,7 +126,7 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
         yield return new TaskTriggerInfo
         {
             Type = TaskTriggerInfo.TriggerInterval,
-            IntervalTicks = TimeSpan.FromMinutes(2).Ticks
+            IntervalTicks = TimeSpan.FromMinutes(1).Ticks
         };
     }
 }
