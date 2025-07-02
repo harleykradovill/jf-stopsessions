@@ -75,9 +75,15 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
         ArgumentNullException.ThrowIfNull(StopSessionsPlugin.Instance?.Configuration);
 
         var config = StopSessionsPlugin.Instance.Configuration;
+
+        if (!config.Enabled)
+        {
+            _logger.LogInformation("[### Stop Sessions] Plugin is disabled. Skipping task execution.");
+            return;
+        }
+
         var pausedValue = config.PausedValue;
         var pausedUnit = config.PausedUnit;
-        var isEnabled = config.Enabled;
 
         double threshholdSeconds = pausedUnit switch // Convert to seconds
         {
