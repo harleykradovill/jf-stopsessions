@@ -20,5 +20,5 @@ public class PluginConfiguration : BasePluginConfiguration
     /// <summary>
     /// Gets or sets a value indicating whether plugin is enabled or not.
     /// </summary>
-    public bool Enabled { get; set; } = false;
+    public bool IsEnabled { get; set; } = false;
 }

@@ -76,7 +76,7 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
 
         var config = StopSessionsPlugin.Instance.Configuration;
 
-        if (!config.Enabled)
+        if (!config.IsEnabled)
         {
             _logger.LogInformation("[### Stop Sessions] Plugin is disabled. Skipping task execution.");
             return;
