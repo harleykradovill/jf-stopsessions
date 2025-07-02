@@ -16,4 +16,9 @@ public class PluginConfiguration : BasePluginConfiguration
     /// Gets or sets the unit.
     /// </summary>
     public string PausedUnit { get; set; } = "Seconds";
+
+    /// <summary>
+    /// Gets or sets a value indicating whether plugin is enabled or not.
+    /// </summary>
+    public bool Enabled { get; set; } = false;
 }

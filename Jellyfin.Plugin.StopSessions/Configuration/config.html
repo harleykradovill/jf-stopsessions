@@ -15,7 +15,7 @@
 
                     <div class="checkboxContainer checkboxContainer">
                             <label class="emby-checkbox-label">
-                                <input id="Enabled" type="checkbox" is="emby-checkbox" />
+                                <input id="isEnabled" type="checkbox" is="emby-checkbox" />
                                 <span>Enabled</span>
                             </label>
                         </div>
@@ -55,7 +55,8 @@
             pluginUniqueId: "28a6125c-cb57-4e8b-b031-421ac55cfa91",
 
             txtCleanValue: document.querySelector("#txtCleanValue"),
-            txtCleanUnit: document.querySelector("#txtCleanUnit")
+            txtCleanUnit: document.querySelector("#txtCleanUnit"),
+            isEnabled: document.querySelector("#isEnabled")
         };
 
         window.addEventListener("pageshow", function (_) {
@@ -64,6 +65,7 @@
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
                 StopSessionsConfigurationPage.txtCleanValue.value = config.PausedValue ?? int(3600);
                 StopSessionsConfigurationPage.txtCleanUnit.value = config.PausedUnit ?? "Seconds";
+                StopSessionsConfigurationPage.isEnabled.value = config.isEnabled ?? false;
                 Dashboard.hideLoadingMsg();
             });
         });
@@ -75,6 +77,7 @@
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
                 config.PausedValue = parseInt(StopSessionsConfigurationPage.txtCleanValue.value);
                 config.PausedUnit = StopSessionsConfigurationPage.txtCleanUnit.value;
+                config.isEnabled = StopSessionsConfigurationPage.isEnabled.value;
                 window.ApiClient.updatePluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId, config).then(Dashboard.processPluginConfigurationUpdateResult);
             });
 

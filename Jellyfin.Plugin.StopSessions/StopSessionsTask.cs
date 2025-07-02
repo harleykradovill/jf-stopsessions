@@ -77,6 +77,7 @@ public class StopSessionsTask : IScheduledTask, IConfigurableScheduledTask
         var config = StopSessionsPlugin.Instance.Configuration;
         var pausedValue = config.PausedValue;
         var pausedUnit = config.PausedUnit;
+        var isEnabled = config.Enabled;
 
         double threshholdSeconds = pausedUnit switch // Convert to seconds
         {
