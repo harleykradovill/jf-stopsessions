@@ -12,11 +12,20 @@
                     <div class="sectionTitleContainer flex align-items-center">
                         <h2 class="sectionTitle">Stop Sessions Settings:</h2>
                     </div>
+
+                    <div class="checkboxContainer checkboxContainer">
+                            <label class="emby-checkbox-label">
+                                <input id="Enabled" type="checkbox" is="emby-checkbox" />
+                                <span>Enabled</span>
+                            </label>
+                        </div>
+
                     <div class="inputRow" style="display: flex; gap: 12px; align-items: flex-end; max-width: 400px;">
                         <div style="display: flex; flex-direction: column;">
                             <label for="txtCleanValue">Duration:</label>
                             <input is="emby-input" type="number" id="txtCleanValue" style="min-width: 100px; width: 150px;" min="0"/>
                         </div>
+
                         <div style="display: flex; flex-direction: column;">
                             <label for="txtCleanUnit">Unit:</label>
                             <select is="emby-select" id="txtCleanUnit" style="min-width: 100px; width: 150px;">
@@ -53,7 +62,7 @@
             Dashboard.showLoadingMsg();
             console.log('pageshow');
             window.ApiClient.getPluginConfiguration(StopSessionsConfigurationPage.pluginUniqueId).then(function (config) {
-                StopSessionsConfigurationPage.txtCleanValue.value = config.PausedValue ?? 3600;
+                StopSessionsConfigurationPage.txtCleanValue.value = config.PausedValue ?? int(3600);
                 StopSessionsConfigurationPage.txtCleanUnit.value = config.PausedUnit ?? "Seconds";
                 Dashboard.hideLoadingMsg();
             });
